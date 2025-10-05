@@ -1,6 +1,6 @@
-#include <iostream>
+#include "Log.h"
 
 int main(int argc, const char *argv[]) {
-    std::cout << "hello world" << std::endl;
+    MY_LOG_INFO("HELLO WORLD!");
     return 0;
 }
