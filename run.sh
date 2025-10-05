@@ -1,0 +1,1 @@
+cd out; ./bin/my-video-app
