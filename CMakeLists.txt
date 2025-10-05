@@ -44,6 +44,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # 依赖的三方库
 include(${CMAKE_SOURCE_DIR}/lib/spdlog.cmake)
+include(${CMAKE_SOURCE_DIR}/lib/glfw.cmake)
 
 # 开始编译自己的项目
 file(GLOB_RECURSE srcs
@@ -58,4 +59,5 @@ add_executable(${PROJECT_NAME} ${srcs})
 # lib
 target_link_libraries(${PROJECT_NAME}
         PUBLIC spdlog
+        PUBLIC glfw
 )
