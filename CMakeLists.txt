@@ -13,21 +13,21 @@ endif ()
 project(my-video-app VERSION 1.0 LANGUAGES C CXX)
 
 # 平台判断并设置默认编译器 仅在未手动指定时生效
-if(NOT DEFINED CMAKE_C_COMPILER AND NOT DEFINED CMAKE_CXX_COMPILER)
-    if(APPLE)
+if (NOT DEFINED CMAKE_C_COMPILER AND NOT DEFINED CMAKE_CXX_COMPILER)
+    if (APPLE)
         message(STATUS "Detected Apple platform")
         set(CMAKE_C_COMPILER /usr/bin/clang CACHE STRING "C compiler" FORCE)
         set(CMAKE_CXX_COMPILER /usr/bin/clang++ CACHE STRING "C++ compiler" FORCE)
-    elseif(UNIX)
+    elseif (UNIX)
         message(STATUS "Detected Linux platform")
         set(CMAKE_C_COMPILER /usr/bin/gcc CACHE STRING "C compiler" FORCE)
         set(CMAKE_CXX_COMPILER /usr/bin/g++ CACHE STRING "C++ compiler" FORCE)
-    else()
+    else ()
         message(FATAL_ERROR "Unsupported platform")
-    endif()
-else()
+    endif ()
+else ()
     message(STATUS "Using user-defined compiler: ${CMAKE_C_COMPILER}, ${CMAKE_CXX_COMPILER}")
-endif()
+endif ()
 
 # c/cpp标准
 set(CMAKE_C_STANDARD 11)
@@ -45,6 +45,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # 依赖的三方库
 include(${CMAKE_SOURCE_DIR}/lib/spdlog.cmake)
 include(${CMAKE_SOURCE_DIR}/lib/glfw.cmake)
+include(${CMAKE_SOURCE_DIR}/lib/glad.cmake)
 
 # 开始编译自己的项目
 file(GLOB_RECURSE srcs
@@ -60,4 +61,15 @@ add_executable(${PROJECT_NAME} ${srcs})
 target_link_libraries(${PROJECT_NAME}
         PUBLIC spdlog
         PUBLIC glfw
+        PUBLIC glad
 )
+
+if (LINUX)
+    target_link_libraries(${PROJECT_NAME} PRIVATE dl GL GLU X11)
+elseif (APPLE)
+    target_link_libraries(${PROJECT_NAME} PRIVATE OpenGl)
+elseif (WIN32)
+    target_link_libraries(${PROJECT_NAME} PRIVATE opengl32)
+else ()
+    message(FATAL_ERROR "I DONT DETECT THE OS!!!")
+endif ()
